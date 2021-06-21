@@ -5,6 +5,8 @@ function myMap() {
     center: new
       google.maps.LatLng(19.191373, 72.829863),
     zoom: 12,
+    streetViewControl: false,
+    mapTypeControl: false,
     mapId: mapId || null,
     styles: []
   }
