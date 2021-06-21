@@ -2,7 +2,19 @@
 let map, infoWindow;
 
 function initMap() {
-  map = new google.maps.Map(document.getElementById("googleMap"), {
+
+  var autocomplete = new google.maps.places.Autocomplete(document.getElementById("autocomplete"), {
+    origin: { lat: 50.064192, lng: -130.605469 },
+    strictBounds: false,
+    types: ["establishment"]
+  })
+  const onPlaceChange = function () {
+    var place = autocomplete.getPlace()
+    if (!place.geometry) document.getElementById("autocomplete").placeholder = "Search Location"
+    else { map.setCenter({ lat: place.geometry.location.lat(), lng: place.geometry.location.lng() }) }
+  }
+  autocomplete.addListener("place_changed", onPlaceChange)
+  var map = new google.maps.Map(document.getElementById("googleMap"), {
     center: { lat: 19.0760, lng: 72.8777 },
     streetViewControl: false,
     mapTypeControl: false,
@@ -52,3 +64,5 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
   );
   infoWindow.open(map);
 }
+
+
