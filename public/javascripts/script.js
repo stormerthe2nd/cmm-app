@@ -11,7 +11,11 @@ function initMap() {
   const onPlaceChange = function () {
     var place = autocomplete.getPlace()
     if (!place.geometry) document.getElementById("autocomplete").placeholder = "Search Location"
-    else { map.setCenter({ lat: place.geometry.location.lat(), lng: place.geometry.location.lng() }) }
+    else {
+      document.getElementById("search").addEventListener("click", () => {
+        map.setCenter({ lat: place.geometry.location.lat(), lng: place.geometry.location.lng() })
+      })
+    }
   }
   autocomplete.addListener("place_changed", onPlaceChange)
   var map = new google.maps.Map(document.getElementById("googleMap"), {
@@ -23,9 +27,13 @@ function initMap() {
   });
   infoWindow = new google.maps.InfoWindow();
   const locationButton = document.createElement("button");
-  locationButton.textContent = "Current Location";
+  locationButton.textContent = "My Location"
   locationButton.classList.add("custom-map-control-button", "btn", "btn-light", "mt-2", "btn-sm");
   map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
+  var marker = new google.maps.Marker({
+    map: map,
+    icon: "https://sampwiki.blast.hk/wroot/images2/a/ad/Icon_2.gif"
+  });
   locationButton.addEventListener("click", () => {
     // Try HTML5 geolocation.
     if (navigator.geolocation) {
@@ -37,11 +45,8 @@ function initMap() {
           };
 
           map.setCenter(pos);
-          new google.maps.Marker({
-            position: pos,
-            map: map,
-            icon: "https://sampwiki.blast.hk/wroot/images2/a/ad/Icon_2.gif"
-          });
+
+          marker.setPosition(pos)
 
         },
         () => {
